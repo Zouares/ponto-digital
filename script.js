@@ -46,7 +46,7 @@ function getWeekDay() {
     return days[d.getDay()];
 
 }
-
+updateContentHour();
 setInterval(updateContentHour, 1000);
 
 console.log(getCurrentTime());
