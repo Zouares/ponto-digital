@@ -2,8 +2,18 @@ const diaSemana = document.getElementById("diasem");
 const dataAtual = document.getElementById("dia");
 const horaAtual = document.getElementById("hora");
 
-dataAtual.textContent = getCurrentDate();
-horaAtual.textContent = getCurrentTime();
+
+
+function updateContentHour() {
+
+    dataAtual.textContent = getCurrentDate();
+    horaAtual.textContent = getCurrentTime();
+    diaSemana.textContent = getWeekDay();
+    
+
+}
+
+
 
 function getCurrentTime() {
 
@@ -31,11 +41,17 @@ function getCurrentDate() {
 
 function getWeekDay() {
 
-    return ""
+    const days = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sabado"];
+    const d = new Date();
+    return days[d.getDay()];
 
 }
 
+setInterval(updateContentHour, 1000);
 
 console.log(getCurrentTime());
 
 console.log(getCurrentDate());
+
+console.log(getWeekDay());
+
