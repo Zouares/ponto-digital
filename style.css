@@ -1,7 +1,6 @@
 .Time {
 
     text-align: center;
-    
 }
 
 .modal-close {
@@ -18,3 +17,9 @@
 }
 
 
+#dialog-ponto {
+
+    padding: 1%;
+    border-radius: 10px;
+    border: 0px;
+}
