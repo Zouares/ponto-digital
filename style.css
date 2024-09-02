@@ -14,6 +14,11 @@ body {
     text-align: center;
 }
 
+.greeting {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
 .clock-wrapper {
     margin-bottom: 30px;
 }
