@@ -1,9 +1,15 @@
+navigator.geolocation.getCurrentPosition((position) => {
+    console.log(position);
+});
+
 const diaSemana = document.getElementById("diasem");
 const dataAtual = document.getElementById("dia");
 const horaAtual = document.getElementById("hora");
 const botaoregistrar = document.getElementById("register-button");
 const dialogPonto = document.getElementById("dialog-ponto");
 const btnDialogFechar = document.getElementById("dialog-fechar");
+const dialogData = document.getElementById("dialog-Data");
+const dialogHora = document.getElementById("dialog-Hora");
 
 function register() {
     dialogPonto.showModal();
@@ -41,6 +47,11 @@ botaoregistrar.addEventListener("click", register);
 btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
+
+dialogData.textContent = getCurrentDate();
+dialogHora.textContent = getCurrentTime();
+
+
 
 updateContentHour();
 setInterval(updateContentHour, 1000);
