@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de ponto</title>
+    <title>Controle de Ponto</title>
     <link href="https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="Time">
-        <div class="header">Controle de Ponto</div>
-        <p id="diasem"></p>
-        <p id="dia"></p>
-        <p id="hora"></p>
-        <button id="register-button">Bater ponto</button>
+    <div class="container">
+        <div class="clock-wrapper">
+            <p id="hora"></p>
+            <p id="dia"></p>
+            <p id="diasem"></p>
+        </div>
+        <button id="register-button">Bater Ponto</button>
     </div>
+
     <dialog id="dialog-ponto">
         <p id="dialog-Data">Data</p>
         <p id="dialog-Hora">Hora</p>
         <button id="dialog-Entrada">Entrada</button>
         <button id="dialog-Saida">Saída</button>
         <button id="dialog-fechar" class="modal-close">X</button>
-   
+    </dialog>
+
     <script src="script.js"></script>
 </body>
 </html>
