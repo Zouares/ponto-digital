@@ -7,13 +7,23 @@ const dialogPonto = document.getElementById("dialog-ponto");
 const btnDialogFechar = document.getElementById("dialog-fechar");
 const dialogData = document.getElementById("dialog-Data");
 const dialogHora = document.getElementById("dialog-Hora");
+const checkbox = document.getElementById("checkbox");
+const history = document.querySelector(".history");
+const historyList = document.getElementById("history-list");
+
+
+const historyData = {};
+
+
+let hasEnteredToday = false;
+
 
 function register() {
-    
     dialogData.textContent = `Data: ${getCurrentDate()}`;
     dialogHora.textContent = `Hora: ${getCurrentTime()}`;
     dialogPonto.showModal();
 }
+
 
 function updateContentHour() {
     horaAtual.textContent = getCurrentTime();
@@ -21,6 +31,7 @@ function updateContentHour() {
     diaSemana.textContent = getWeekDay();
     greetingElement.textContent = getGreeting("Fulano de Tal");
 }
+
 
 function getGreeting(name) {
     const hours = new Date().getHours();
@@ -33,32 +44,154 @@ function getGreeting(name) {
     }
 }
 
+
 function getCurrentTime() {
     const date = new Date();
-    let hora = (date.getHours() < 10 ? '0' : '') + date.getHours();
-    let minutos = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-    let segundos = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
-    return `${hora}:${minutos}:${segundos}`;
+    const horas = String(date.getHours()).padStart(2, '0');
+    const minutos = String(date.getMinutes()).padStart(2, '0');
+    const segundos = String(date.getSeconds()).padStart(2, '0');
+    return `${horas}:${minutos}:${segundos}`;
 }
+
+function getCurrentTimehistory() {
+    const date = new Date();
+    const horas = String(date.getHours()).padStart(2, '0');
+    const minutos = String(date.getMinutes()).padStart(2, '0');
+    const segundos = String(date.getSeconds()).padStart(2, '0');
+    return `${horas}:${minutos}`;
+}
+
 
 function getCurrentDate() {
     const date = new Date();
-    let mes = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
-    let data = (date.getDate() < 10 ? '0' : '') + date.getDate();
+    let dia = String(date.getDate()).padStart(2, '0');
+    let mes = String(date.getMonth() + 1).padStart(2, '0');
     let ano = date.getFullYear();
-    return `${data}/${mes}/${ano}`;
+    return `${dia}/${mes}/${ano}`;
 }
+
 
 function getWeekDay() {
-    const days = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
-    const d = new Date();
-    return days[d.getDay()];
+    const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+    return daysOfWeek[new Date().getDay()];
 }
 
-botaoregistrar.addEventListener("click", register);
-btnDialogFechar.addEventListener("click", () => {
-    dialogPonto.close();
-});
 
-updateContentHour();
+function closeDialog() {
+    dialogPonto.close();
+}
+
+
+function toggleHistory() {
+    history.classList.toggle("show");
+}
+
+
+function addHistoryEntry(date, type, time) {
+    if (!historyData[date]) {
+        historyData[date] = [];
+        
+        const historyHeader = document.createElement("div");
+        historyHeader.className = "history-header";
+        historyHeader.textContent = `${getDayLabel(date)} ${date}`;
+        historyList.appendChild(historyHeader);
+    }
+    
+    historyData[date].push({ type, time });
+
+    updateHistoryList();
+}
+
+
+function getDayLabel(date) {
+    const today = getCurrentDate();
+    if (date === today) {
+        return "HOJE";
+    }
+    const yesterday = getYesterdayDate();
+    if (date === yesterday) {
+        return "ONTEM";
+    }
+    return date;
+}
+
+
+function getYesterdayDate() {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    return getCurrentDate();
+}
+
+
+function updateHistoryList() {
+    historyList.innerHTML = "";
+    Object.keys(historyData).forEach(date => {
+        const entries = historyData[date];
+        
+        const historyHeader = document.createElement("div");
+        historyHeader.className = "history-header";
+        historyHeader.textContent = `${getDayLabel(date)} ${date}`;
+        historyList.appendChild(historyHeader);
+        
+        entries.forEach(entry => {
+            addHistoryEntryToList(entry.type, entry.time);
+        });
+    });
+}
+
+
+function addHistoryEntryToList(type, time) {
+    const historyItem = document.createElement("div");
+    historyItem.className = "history-item";
+    
+    const statusDot = document.createElement("div");
+    statusDot.className = "status-dot";
+    statusDot.style.backgroundColor = type === "ENTRADA" ? "#28a745" : "#dc3545"; // Verde ou vermelho
+    historyItem.appendChild(statusDot);
+    
+    const timeElement = document.createElement("div");
+    timeElement.className = "time";
+    timeElement.textContent = time;
+    historyItem.appendChild(timeElement);
+    
+    const entryElement = document.createElement("div");
+    entryElement.className = "entry";
+    entryElement.textContent = type;
+    historyItem.appendChild(entryElement);
+    
+    historyList.appendChild(historyItem);
+}
+
+
+function handleRegister(type) {
+    const currentDate = getCurrentDate();
+    const currentTime = getCurrentTimehistory();
+    
+    if (type === "SAÍDA" && !hasEnteredToday) {
+        alert("Entre primeiro.");
+        return;
+    }
+
+    
+    if (type === "ENTRADA" && !hasEnteredToday) {
+        hasEnteredToday = true;
+    }
+
+    
+    addHistoryEntry(currentDate, type, currentTime);
+    
+    
+    closeDialog();
+}
+
+
+botaoregistrar.addEventListener("click", register);
+btnDialogFechar.addEventListener("click", closeDialog);
+checkbox.addEventListener("change", toggleHistory);
+
+document.getElementById("dialog-Entrada").addEventListener("click", () => handleRegister("ENTRADA"));
+document.getElementById("dialog-Saida").addEventListener("click", () => handleRegister("SAÍDA"));
+
+
 setInterval(updateContentHour, 1000);
+updateContentHour();
