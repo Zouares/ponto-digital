@@ -169,6 +169,7 @@ function handleRegister(type) {
     
     if (type === "SAÍDA" && !hasEnteredToday) {
         alert("Entre primeiro.");
+        console.log('O usuário ainda não entrou');
         return;
     }
 
