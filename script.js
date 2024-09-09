@@ -187,8 +187,6 @@ function handleRegister(type) {
     closeDialog();
 }
 
-
-
 botaoregistrar.addEventListener("click", register);
 btnDialogFechar.addEventListener("click", closeDialog);
 checkbox.addEventListener("change", toggleHistory);
