@@ -178,6 +178,7 @@ function handleRegister(type) {
         hasEnteredToday = true;
         console.log(`Entrada registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     } else if (type === "SAÍDA") {
+        hasEnteredToday = true;
         console.log(`Saída registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     }
 
