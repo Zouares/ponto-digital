@@ -175,14 +175,16 @@ function handleRegister(type) {
     
     if (type === "ENTRADA" && !hasEnteredToday) {
         hasEnteredToday = true;
+        console.log(`Entrada registrada: Data - ${currentDate}, Hora - ${currentTime}`);
+    } else if (type === "SAÍDA") {
+        console.log(`Saída registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     }
 
-    
     addHistoryEntry(currentDate, type, currentTime);
-    
     
     closeDialog();
 }
+
 
 
 botaoregistrar.addEventListener("click", register);
@@ -195,3 +197,5 @@ document.getElementById("dialog-Saida").addEventListener("click", () => handleRe
 
 setInterval(updateContentHour, 1000);
 updateContentHour();
+
+
