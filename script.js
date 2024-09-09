@@ -102,7 +102,7 @@ function addHistoryEntry(date, type, time) {
     updateHistoryList();
 }
 
-
+//inutil por enquanto pq não tem como salvar ainda
 function getDayLabel(date) {
     const today = getCurrentDate();
     if (date === today) {
@@ -115,7 +115,7 @@ function getDayLabel(date) {
     return date;
 }
 
-
+//inutil por enquanto pq não tem como salvar ainda
 function getYesterdayDate() {
     const date = new Date();
     date.setDate(date.getDate() - 1);
