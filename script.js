@@ -165,12 +165,21 @@ function handleRegister(type) {
         return;
     }
 
+
     if (type === "ENTRADA" && !hasEnteredToday) {
         hasEnteredToday = true;
         console.log(`Entrada registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     } else if (type === "SAÍDA") {
         hasEnteredToday = true;
         console.log(`Saída registrada: Data - ${currentDate}, Hora - ${currentTime}`);
+    }
+    if (type === "INTERVALO" && !hasEnteredToday) {
+        hasEnteredToday = true;
+        console.log(`Intervalo registrado: Data - ${currentDate}, Hora - ${currentTime}`);
+
+    }else if (type ==="SAÍDA INTERVALO") {
+        hasEnteredToday = true;
+        console.log(`Saída do intervalo registrado: Data - ${currentDate}, Hora - ${currentTime}`);
     }
 
     addHistoryEntry(currentDate, type, currentTime);
@@ -187,6 +196,8 @@ checkbox.addEventListener("change", toggleHistory);
 
 document.getElementById("dialog-Entrada").addEventListener("click", () => handleRegister("ENTRADA"));
 document.getElementById("dialog-Saida").addEventListener("click", () => handleRegister("SAÍDA"));
+document.getElementById("dialog-Intervalo").addEventListener("click", () => handleRegister("INTERVALO"));
+document.getElementById("saida-intervalo").addEventListener("click", () => handleRegister("SAÍDA INTERVALO"));
 
 setInterval(updateContentHour, 1000);
 updateContentHour();
