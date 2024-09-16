@@ -14,7 +14,6 @@ const historyList = document.getElementById("history-list");
 let historyData = loadHistoryFromLocalStorage();
 let hasEnteredToday = false;
 
-
 function saveHistoryToLocalStorage() {
     localStorage.setItem("historyData", JSON.stringify(historyData));
 }
@@ -139,7 +138,16 @@ function addHistoryEntryToList(type, time) {
     
     const statusDot = document.createElement("div");
     statusDot.className = "status-dot";
-    statusDot.style.backgroundColor = type === "ENTRADA" ? "#28a745" : "#dc3545"; 
+    
+    
+    if (type === "ENTRADA") {
+        statusDot.style.backgroundColor = "#28a745"; 
+    } else if (type === "SAÍDA") {
+        statusDot.style.backgroundColor = "#dc3545"; 
+    } else if (type === "INTERVALO" || type === "SAÍDA INTERVALO") {
+        statusDot.style.backgroundColor = "#ffc107"; 
+    }
+    
     historyItem.appendChild(statusDot);
     
     const timeElement = document.createElement("div");
@@ -165,21 +173,16 @@ function handleRegister(type) {
         return;
     }
 
-
     if (type === "ENTRADA" && !hasEnteredToday) {
         hasEnteredToday = true;
         console.log(`Entrada registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     } else if (type === "SAÍDA") {
         hasEnteredToday = true;
         console.log(`Saída registrada: Data - ${currentDate}, Hora - ${currentTime}`);
-    }
-    if (type === "INTERVALO" && !hasEnteredToday) {
-        hasEnteredToday = true;
+    } else if (type === "INTERVALO" && hasEnteredToday) {
         console.log(`Intervalo registrado: Data - ${currentDate}, Hora - ${currentTime}`);
-
-    }else if (type ==="SAÍDA INTERVALO") {
-        hasEnteredToday = true;
-        console.log(`Saída do intervalo registrado: Data - ${currentDate}, Hora - ${currentTime}`);
+    } else if (type === "SAÍDA INTERVALO" && hasEnteredToday) {
+        console.log(`Saída do intervalo registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     }
 
     addHistoryEntry(currentDate, type, currentTime);
@@ -201,4 +204,4 @@ document.getElementById("saida-intervalo").addEventListener("click", () => handl
 
 setInterval(updateContentHour, 1000);
 updateContentHour();
-updateHistoryList();  
+updateHistoryList();
