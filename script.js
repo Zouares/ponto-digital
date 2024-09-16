@@ -10,6 +10,8 @@ const dialogHora = document.getElementById("dialog-Hora");
 const checkbox = document.getElementById("checkbox");
 const history = document.querySelector(".history");
 const historyList = document.getElementById("history-list");
+const registerTypeSelect = document.getElementById("register-type");
+const registerButtonSelect = document.getElementById("register-button-select");
 
 let historyData = loadHistoryFromLocalStorage();
 let hasEnteredToday = false;
@@ -139,7 +141,6 @@ function addHistoryEntryToList(type, time) {
     const statusDot = document.createElement("div");
     statusDot.className = "status-dot";
     
-    
     if (type === "ENTRADA") {
         statusDot.style.backgroundColor = "#28a745"; 
     } else if (type === "SAÍDA") {
@@ -163,7 +164,8 @@ function addHistoryEntryToList(type, time) {
     historyList.appendChild(historyItem);
 }
 
-function handleRegister(type) {
+function handleRegister() {
+    const type = registerTypeSelect.value;
     const currentDate = getCurrentDate();
     const currentTime = getCurrentTimehistory();
     
@@ -197,11 +199,22 @@ botaoregistrar.addEventListener("click", register);
 btnDialogFechar.addEventListener("click", closeDialog);
 checkbox.addEventListener("change", toggleHistory);
 
-document.getElementById("dialog-Entrada").addEventListener("click", () => handleRegister("ENTRADA"));
-document.getElementById("dialog-Saida").addEventListener("click", () => handleRegister("SAÍDA"));
-document.getElementById("dialog-Intervalo").addEventListener("click", () => handleRegister("INTERVALO"));
-document.getElementById("saida-intervalo").addEventListener("click", () => handleRegister("SAÍDA INTERVALO"));
+registerButtonSelect.addEventListener("click", handleRegister);
 
 setInterval(updateContentHour, 1000);
 updateContentHour();
 updateHistoryList();
+
+const clearHistoryButton = document.getElementById("clear-history");
+
+function clearHistory() {
+    historyData = {}; 
+    saveHistoryToLocalStorage(); 
+    updateHistoryList(); 
+}
+
+clearHistoryButton.addEventListener("click", () => {
+    if (confirm("Você realmente deseja limpar o histórico?")) {
+        clearHistory();
+    }
+});

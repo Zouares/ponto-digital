@@ -244,3 +244,18 @@ body {
         max-width: 90%;
     }
 }
+
+.clear-history-button {
+    background-color: #dc3545; 
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.clear-history-button:hover {
+    background-color: #c82333; 
+}
