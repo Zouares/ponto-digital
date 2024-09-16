@@ -11,12 +11,18 @@ const checkbox = document.getElementById("checkbox");
 const history = document.querySelector(".history");
 const historyList = document.getElementById("history-list");
 
-
-const historyData = {};
-
-
+let historyData = loadHistoryFromLocalStorage();
 let hasEnteredToday = false;
 
+
+function saveHistoryToLocalStorage() {
+    localStorage.setItem("historyData", JSON.stringify(historyData));
+}
+
+function loadHistoryFromLocalStorage() {
+    const storedHistory = localStorage.getItem("historyData");
+    return storedHistory ? JSON.parse(storedHistory) : {};
+}
 
 function register() {
     dialogData.textContent = `Data: ${getCurrentDate()}`;
@@ -24,14 +30,12 @@ function register() {
     dialogPonto.showModal();
 }
 
-
 function updateContentHour() {
     horaAtual.textContent = getCurrentTime();
     dataAtual.textContent = getCurrentDate();
     diaSemana.textContent = getWeekDay();
     greetingElement.textContent = getGreeting("Fulano de Tal");
 }
-
 
 function getGreeting(name) {
     const hours = new Date().getHours();
@@ -43,7 +47,6 @@ function getGreeting(name) {
         return `Boa noite, ${name}`;
     }
 }
-
 
 function getCurrentTime() {
     const date = new Date();
@@ -57,10 +60,8 @@ function getCurrentTimehistory() {
     const date = new Date();
     const horas = String(date.getHours()).padStart(2, '0');
     const minutos = String(date.getMinutes()).padStart(2, '0');
-    const segundos = String(date.getSeconds()).padStart(2, '0');
     return `${horas}:${minutos}`;
 }
-
 
 function getCurrentDate() {
     const date = new Date();
@@ -70,22 +71,18 @@ function getCurrentDate() {
     return `${dia}/${mes}/${ano}`;
 }
 
-
 function getWeekDay() {
     const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
     return daysOfWeek[new Date().getDay()];
 }
 
-
 function closeDialog() {
     dialogPonto.close();
 }
 
-
 function toggleHistory() {
     history.classList.toggle("show");
 }
-
 
 function addHistoryEntry(date, type, time) {
     if (!historyData[date]) {
@@ -98,11 +95,10 @@ function addHistoryEntry(date, type, time) {
     }
     
     historyData[date].push({ type, time });
-
+    saveHistoryToLocalStorage();  
     updateHistoryList();
 }
 
-//inutil por enquanto pq não tem como salvar ainda
 function getDayLabel(date) {
     const today = getCurrentDate();
     if (date === today) {
@@ -115,13 +111,11 @@ function getDayLabel(date) {
     return date;
 }
 
-//inutil por enquanto pq não tem como salvar ainda
 function getYesterdayDate() {
     const date = new Date();
     date.setDate(date.getDate() - 1);
     return getCurrentDate();
 }
-
 
 function updateHistoryList() {
     historyList.innerHTML = "";
@@ -139,14 +133,13 @@ function updateHistoryList() {
     });
 }
 
-
 function addHistoryEntryToList(type, time) {
     const historyItem = document.createElement("div");
     historyItem.className = "history-item";
     
     const statusDot = document.createElement("div");
     statusDot.className = "status-dot";
-    statusDot.style.backgroundColor = type === "ENTRADA" ? "#28a745" : "#dc3545"; // Verde ou vermelho
+    statusDot.style.backgroundColor = type === "ENTRADA" ? "#28a745" : "#dc3545"; 
     historyItem.appendChild(statusDot);
     
     const timeElement = document.createElement("div");
@@ -162,7 +155,6 @@ function addHistoryEntryToList(type, time) {
     historyList.appendChild(historyItem);
 }
 
-
 function handleRegister(type) {
     const currentDate = getCurrentDate();
     const currentTime = getCurrentTimehistory();
@@ -173,7 +165,6 @@ function handleRegister(type) {
         return;
     }
 
-    
     if (type === "ENTRADA" && !hasEnteredToday) {
         hasEnteredToday = true;
         console.log(`Entrada registrada: Data - ${currentDate}, Hora - ${currentTime}`);
@@ -183,9 +174,12 @@ function handleRegister(type) {
     }
 
     addHistoryEntry(currentDate, type, currentTime);
-    
     closeDialog();
 }
+
+window.addEventListener('load', () => {
+    checkbox.checked = false;
+});
 
 botaoregistrar.addEventListener("click", register);
 btnDialogFechar.addEventListener("click", closeDialog);
@@ -194,8 +188,6 @@ checkbox.addEventListener("change", toggleHistory);
 document.getElementById("dialog-Entrada").addEventListener("click", () => handleRegister("ENTRADA"));
 document.getElementById("dialog-Saida").addEventListener("click", () => handleRegister("SAÍDA"));
 
-
 setInterval(updateContentHour, 1000);
 updateContentHour();
-
-
+updateHistoryList();  
