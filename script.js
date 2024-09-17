@@ -12,9 +12,13 @@ const history = document.querySelector(".history");
 const historyList = document.getElementById("history-list");
 const registerTypeSelect = document.getElementById("register-type");
 const registerButtonSelect = document.getElementById("register-button-select");
+const clearHistoryButton = document.getElementById("clear-history");
 
 let historyData = loadHistoryFromLocalStorage();
 let hasEnteredToday = false;
+let notificationCount = 0;
+const maxNotifications = 5;
+let notificationTimeouts = [];
 
 function saveHistoryToLocalStorage() {
     localStorage.setItem("historyData", JSON.stringify(historyData));
@@ -66,9 +70,9 @@ function getCurrentTimehistory() {
 
 function getCurrentDate() {
     const date = new Date();
-    let dia = String(date.getDate()).padStart(2, '0');
-    let mes = String(date.getMonth() + 1).padStart(2, '0');
-    let ano = date.getFullYear();
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const ano = date.getFullYear();
     return `${dia}/${mes}/${ano}`;
 }
 
@@ -142,11 +146,11 @@ function addHistoryEntryToList(type, time) {
     statusDot.className = "status-dot";
     
     if (type === "ENTRADA") {
-        statusDot.style.backgroundColor = "#28a745"; 
+        statusDot.style.backgroundColor = "#28a745";
     } else if (type === "SAÍDA") {
-        statusDot.style.backgroundColor = "#dc3545"; 
+        statusDot.style.backgroundColor = "#dc3545";
     } else if (type === "INTERVALO" || type === "SAÍDA INTERVALO") {
-        statusDot.style.backgroundColor = "#ffc107"; 
+        statusDot.style.backgroundColor = "#ffc107";
     }
     
     historyItem.appendChild(statusDot);
@@ -171,24 +175,59 @@ function handleRegister() {
     
     if (type === "SAÍDA" && !hasEnteredToday) {
         alert("Entre primeiro.");
-        console.log('O usuário ainda não entrou');
         return;
     }
 
     if (type === "ENTRADA" && !hasEnteredToday) {
         hasEnteredToday = true;
-        console.log(`Entrada registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     } else if (type === "SAÍDA") {
         hasEnteredToday = true;
-        console.log(`Saída registrada: Data - ${currentDate}, Hora - ${currentTime}`);
     } else if (type === "INTERVALO" && hasEnteredToday) {
-        console.log(`Intervalo registrado: Data - ${currentDate}, Hora - ${currentTime}`);
+        
     } else if (type === "SAÍDA INTERVALO" && hasEnteredToday) {
-        console.log(`Saída do intervalo registrada: Data - ${currentDate}, Hora - ${currentTime}`);
+        
     }
 
     addHistoryEntry(currentDate, type, currentTime);
     closeDialog();
+    showNotification(`${type} confirmada com sucesso`);
+}
+
+function showNotification(message) {
+    const notificationContainer = document.getElementById('notification-container');
+    
+    const notification = document.createElement('div');
+    notification.classList.add('notification');
+    notification.textContent = message;
+
+    notificationContainer.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+
+    const timeoutId = setTimeout(() => {
+        notification.classList.add('hide');
+    }, 3000);
+
+    const removeTimeoutId = setTimeout(() => {
+        notification.remove();
+        notificationCount--;
+        notificationTimeouts.shift();
+    }, 3500);
+
+    notificationCount++;
+    if (notificationCount > maxNotifications) {
+        const firstNotification = notificationContainer.querySelector('.notification');
+        if (firstNotification) {
+            clearTimeout(notificationTimeouts[0]);
+            firstNotification.remove();
+            notificationCount--;
+        }
+    }
+
+    notificationTimeouts.push(timeoutId);
+    notificationTimeouts.push(removeTimeoutId);
 }
 
 window.addEventListener('load', () => {
@@ -198,19 +237,16 @@ window.addEventListener('load', () => {
 botaoregistrar.addEventListener("click", register);
 btnDialogFechar.addEventListener("click", closeDialog);
 checkbox.addEventListener("change", toggleHistory);
-
 registerButtonSelect.addEventListener("click", handleRegister);
 
 setInterval(updateContentHour, 1000);
 updateContentHour();
 updateHistoryList();
 
-const clearHistoryButton = document.getElementById("clear-history");
-
 function clearHistory() {
-    historyData = {}; 
-    saveHistoryToLocalStorage(); 
-    updateHistoryList(); 
+    historyData = {};
+    saveHistoryToLocalStorage();
+    updateHistoryList();
 }
 
 clearHistoryButton.addEventListener("click", () => {

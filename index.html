@@ -19,18 +19,21 @@
     </div>
 
     <dialog id="dialog-ponto">
-        <div id="dialog-content">
-            <p id="dialog-Data">Data: </p>
-            <p id="dialog-Hora">Hora: </p>
+        <button id="dialog-fechar">X</button>
+        <div class="dialog-header">Registrar Ponto</div>
+        <div class="dialog-body">
+            <p id="dialog-Data"></p>
+            <p id="dialog-Hora"></p>
             <select id="register-type">
                 <option value="ENTRADA">Entrada</option>
-                <option value="INTERVALO">Intervalo</option>
-                <option value="SAÍDA INTERVALO">Saída do Intervalo</option>
                 <option value="SAÍDA">Saída</option>
+                <option value="INTERVALO">Intervalo</option>
+                <option value="SAÍDA INTERVALO">Saída Intervalo</option>
             </select>
-            <button id="register-button-select">Registrar</button>
         </div>
-        <button id="dialog-fechar">Fechar</button>
+        <div class="dialog-buttons">
+            <button id="register-button-select">Confirmar</button>
+        </div>
     </dialog>
 
     <input id="checkbox" type="checkbox">
@@ -51,6 +54,8 @@
             <button id="clear-history" class="clear-history-button">Limpar Histórico</button>
         </div>
     </div>
+
+    <div id="notification-container" class="notification-container"></div>
 
     <script src="script.js"></script>
 </body>
