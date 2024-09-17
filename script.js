@@ -20,6 +20,14 @@ let notificationCount = 0;
 const maxNotifications = 5;
 let notificationTimeouts = [];
 
+function PositionObt(geolocalizao){
+    console.log(geolocalizao)
+}
+
+function Positionfailed(geolocalizao){
+    console.error(erro)
+}
+
 function saveHistoryToLocalStorage() {
     localStorage.setItem("historyData", JSON.stringify(historyData));
 }
@@ -214,7 +222,7 @@ function showNotification(message) {
         notification.remove();
         notificationCount--;
         notificationTimeouts.shift();
-    }, 3500);
+    }, 4000);
 
     notificationCount++;
     if (notificationCount > maxNotifications) {

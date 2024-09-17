@@ -429,11 +429,13 @@ dialog[open] {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    transition: opacity 1s, transform 0.5s; 
 }
 
 
 .notification.hide {
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-20px);
+    transform: translateY(-0px);
+    transition: visibility 3s, opacity 1s;
 }
