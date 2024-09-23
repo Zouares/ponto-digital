@@ -7,7 +7,7 @@ body {
     align-items: center;
     height: 100vh;
     background: linear-gradient(135deg, #00c6ff, #0072ff);
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .container {
@@ -75,6 +75,8 @@ body {
     width: 100%;
     text-align: center;
 }
+
+
 
 #dialog-Entrada, #dialog-Saida, #dialog-Intervalo, #saida-intervalo {
     padding: 10px 20px;
@@ -272,6 +274,21 @@ body {
     background-color: #c82333; 
 }
 
+.view-history-button {
+    background-color: #358bdc; 
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.view-history-button:hover {
+    background-color: #2365c8; 
+}
+
 
 dialog {
     width: 90%;
@@ -439,3 +456,48 @@ dialog[open] {
     transform: translateY(-0px);
     transition: visibility 3s, opacity 1s;
 }
+
+
+
+
+.input-container {
+    --c-text: rgb(50, 50, 80);
+    --c-bg: rgb(252, 252, 252);
+    --c-outline: rgb(55, 45, 190);
+    display: grid;
+    gap: 1ch;
+    position: relative;
+    width: 100%; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+}
+
+.input-field {
+    padding: 0.5em 0.75em;
+    border-radius: 0.2em;
+    border: 1px solid var(--c-border, currentColor);
+    color: var(--c-text);
+    font-size: 1rem;
+    letter-spacing: 0.1ch;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+.input-label {
+    --timing: 200ms ease-in;
+    position: absolute;
+    left: 0;
+    top: 80%;
+    transition: transform var(--timing),
+        opacity var(--timing);
+    transform: translateY(-50%);
+    opacity: 0;
+    color: var(--c-text);
+    font-weight: 500;
+}
+
+
+  
+
+
+

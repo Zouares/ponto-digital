@@ -26,10 +26,15 @@
             <p id="dialog-Hora"></p>
             <select id="register-type">
                 <option value="ENTRADA">Entrada</option>
-                <option value="SAÍDA">Saída</option>
                 <option value="INTERVALO">Intervalo</option>
                 <option value="SAÍDA INTERVALO">Saída Intervalo</option>
+                <option value="SAÍDA">Saída</option>
             </select>
+            <p class="input-container">
+                <input type="text" placeholder="Justificativa (opcional)" name="justificativa" id="justificativa" class="input-field" >
+                <label class="input-label" for="justificativa">Justificativa (opcional)</label>
+            </p>
+        
         </div>
         <div class="dialog-buttons">
             <button id="register-button-select">Confirmar</button>
@@ -46,11 +51,15 @@
     
     <div class="history">
         
+        
         <div class="history-header">Histórico</div>
         <ul id="history-list">
             
         </ul>
         <div class="history-header">
+        <a href="HistoryPage.html">
+            <button id="view-all-history" class="view-history-button">Ver Histórico Completo</button>
+        </a>
             <button id="clear-history" class="clear-history-button">Limpar Histórico</button>
         </div>
     </div>

@@ -13,6 +13,7 @@ const historyList = document.getElementById("history-list");
 const registerTypeSelect = document.getElementById("register-type");
 const registerButtonSelect = document.getElementById("register-button-select");
 const clearHistoryButton = document.getElementById("clear-history");
+const justificativaField = document.getElementById("justificativa"); 
 
 let historyData = loadHistoryFromLocalStorage();
 let hasEnteredToday = false;
@@ -21,11 +22,11 @@ const maxNotifications = 5;
 let notificationTimeouts = [];
 
 function PositionObt(geolocalizao){
-    console.log(geolocalizao)
+    console.log(geolocalizao);
 }
 
 function Positionfailed(geolocalizao){
-    console.error(erro)
+    console.error(erro);
 }
 
 function saveHistoryToLocalStorage() {
@@ -97,7 +98,7 @@ function toggleHistory() {
     history.classList.toggle("show");
 }
 
-function addHistoryEntry(date, type, time) {
+function addHistoryEntry(date, type, time, justificativa) { 
     if (!historyData[date]) {
         historyData[date] = [];
         
@@ -107,7 +108,7 @@ function addHistoryEntry(date, type, time) {
         historyList.appendChild(historyHeader);
     }
     
-    historyData[date].push({ type, time });
+    historyData[date].push({ type, time, justificativa }); 
     saveHistoryToLocalStorage();  
     updateHistoryList();
 }
@@ -141,12 +142,12 @@ function updateHistoryList() {
         historyList.appendChild(historyHeader);
         
         entries.forEach(entry => {
-            addHistoryEntryToList(entry.type, entry.time);
+            addHistoryEntryToList(entry.type, entry.time); 
         });
     });
 }
 
-function addHistoryEntryToList(type, time) {
+function addHistoryEntryToList(type, time) { 
     const historyItem = document.createElement("div");
     historyItem.className = "history-item";
     
@@ -168,10 +169,16 @@ function addHistoryEntryToList(type, time) {
     timeElement.textContent = time;
     historyItem.appendChild(timeElement);
     
+
     const entryElement = document.createElement("div");
     entryElement.className = "entry";
     entryElement.textContent = type;
     historyItem.appendChild(entryElement);
+
+    
+    
+
+    
     
     historyList.appendChild(historyItem);
 }
@@ -180,7 +187,8 @@ function handleRegister() {
     const type = registerTypeSelect.value;
     const currentDate = getCurrentDate();
     const currentTime = getCurrentTimehistory();
-    
+    const justificativa = justificativaField.value; 
+
     if (type === "SAÍDA" && !hasEnteredToday) {
         alert("Entre primeiro.");
         return;
@@ -196,7 +204,7 @@ function handleRegister() {
         
     }
 
-    addHistoryEntry(currentDate, type, currentTime);
+    addHistoryEntry(currentDate, type, currentTime, justificativa); 
     closeDialog();
     showNotification(`${type} confirmada com sucesso`);
 }
