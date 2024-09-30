@@ -19,6 +19,7 @@ body {
     margin-bottom: 10px;
 }
 
+
 .clock-wrapper {
     margin-bottom: 30px;
 }
@@ -274,21 +275,6 @@ body {
     background-color: #c82333; 
 }
 
-.view-history-button {
-    background-color: #358bdc; 
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 14px;
-    margin: 10px 0;
-}
-
-.view-history-button:hover {
-    background-color: #2365c8; 
-}
-
 
 dialog {
     width: 90%;
@@ -495,9 +481,3 @@ dialog[open] {
     color: var(--c-text);
     font-weight: 500;
 }
-
-
-  
-
-
-

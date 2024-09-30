@@ -157,6 +157,7 @@ function addHistoryEntryToList(type, time) {
     entryElement.textContent = type;
     historyItem.appendChild(entryElement);
     historyList.appendChild(historyItem);
+
 }
 
 function handleRegister() {
@@ -204,6 +205,8 @@ function showNotification(message) {
     notificationTimeouts.push(timeoutId, removeTimeoutId);
 }
 
+
+
 function clearHistory() {
     historyData = {};
     saveHistoryToLocalStorage();
@@ -225,3 +228,4 @@ clearHistoryButton.addEventListener("click", () => {
 setInterval(updateContentHour, 1000);
 updateContentHour();
 updateHistoryList();
+
