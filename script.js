@@ -13,7 +13,7 @@ const historyList = document.getElementById("history-list");
 const registerTypeSelect = document.getElementById("register-type");
 const registerButtonSelect = document.getElementById("register-button-select");
 const clearHistoryButton = document.getElementById("clear-history");
-const justificativaField = document.getElementById("justificativa"); 
+const justificativaField = document.getElementById("justificativa");
 
 let historyData = loadHistoryFromLocalStorage();
 let hasEnteredToday = false;
@@ -21,11 +21,11 @@ let notificationCount = 0;
 const maxNotifications = 5;
 let notificationTimeouts = [];
 
-function PositionObt(geolocalizao){
+function PositionObt(geolocalizao) {
     console.log(geolocalizao);
 }
 
-function Positionfailed(geolocalizao){
+function Positionfailed(erro) {
     console.error(erro);
 }
 
@@ -98,30 +98,24 @@ function toggleHistory() {
     history.classList.toggle("show");
 }
 
-function addHistoryEntry(date, type, time, justificativa) { 
+function addHistoryEntry(date, type, time, justificativa) {
     if (!historyData[date]) {
         historyData[date] = [];
-        
         const historyHeader = document.createElement("div");
         historyHeader.className = "history-header";
         historyHeader.textContent = `${getDayLabel(date)} ${date}`;
         historyList.appendChild(historyHeader);
     }
-    
-    historyData[date].push({ type, time, justificativa }); 
-    saveHistoryToLocalStorage();  
+    historyData[date].push({ type, time, justificativa });
+    saveHistoryToLocalStorage();
     updateHistoryList();
 }
 
 function getDayLabel(date) {
     const today = getCurrentDate();
-    if (date === today) {
-        return "HOJE";
-    }
+    if (date === today) return "HOJE";
     const yesterday = getYesterdayDate();
-    if (date === yesterday) {
-        return "ONTEM";
-    }
+    if (date === yesterday) return "ONTEM";
     return date;
 }
 
@@ -135,51 +129,33 @@ function updateHistoryList() {
     historyList.innerHTML = "";
     Object.keys(historyData).forEach(date => {
         const entries = historyData[date];
-        
         const historyHeader = document.createElement("div");
         historyHeader.className = "history-header";
         historyHeader.textContent = `${getDayLabel(date)} ${date}`;
         historyList.appendChild(historyHeader);
-        
         entries.forEach(entry => {
-            addHistoryEntryToList(entry.type, entry.time); 
+            addHistoryEntryToList(entry.type, entry.time);
         });
     });
 }
 
-function addHistoryEntryToList(type, time) { 
+function addHistoryEntryToList(type, time) {
     const historyItem = document.createElement("div");
     historyItem.className = "history-item";
-    
     const statusDot = document.createElement("div");
     statusDot.className = "status-dot";
-    
-    if (type === "ENTRADA") {
-        statusDot.style.backgroundColor = "#28a745";
-    } else if (type === "SAÍDA") {
-        statusDot.style.backgroundColor = "#dc3545";
-    } else if (type === "INTERVALO" || type === "SAÍDA INTERVALO") {
-        statusDot.style.backgroundColor = "#ffc107";
-    }
-    
+    if (type === "ENTRADA") statusDot.style.backgroundColor = "#28a745";
+    else if (type === "SAÍDA") statusDot.style.backgroundColor = "#dc3545";
+    else if (type === "INTERVALO" || type === "SAÍDA INTERVALO") statusDot.style.backgroundColor = "#ffc107";
     historyItem.appendChild(statusDot);
-    
     const timeElement = document.createElement("div");
     timeElement.className = "time";
     timeElement.textContent = time;
     historyItem.appendChild(timeElement);
-    
-
     const entryElement = document.createElement("div");
     entryElement.className = "entry";
     entryElement.textContent = type;
     historyItem.appendChild(entryElement);
-
-    
-    
-
-    
-    
     historyList.appendChild(historyItem);
 }
 
@@ -187,51 +163,35 @@ function handleRegister() {
     const type = registerTypeSelect.value;
     const currentDate = getCurrentDate();
     const currentTime = getCurrentTimehistory();
-    const justificativa = justificativaField.value; 
+    const justificativa = justificativaField.value;
 
     if (type === "SAÍDA" && !hasEnteredToday) {
         alert("Entre primeiro.");
         return;
     }
-
     if (type === "ENTRADA" && !hasEnteredToday) {
         hasEnteredToday = true;
     } else if (type === "SAÍDA") {
         hasEnteredToday = true;
-    } else if (type === "INTERVALO" && hasEnteredToday) {
-        
-    } else if (type === "SAÍDA INTERVALO" && hasEnteredToday) {
-        
     }
-
-    addHistoryEntry(currentDate, type, currentTime, justificativa); 
+    addHistoryEntry(currentDate, type, currentTime, justificativa);
     closeDialog();
     showNotification(`${type} confirmada com sucesso`);
 }
 
 function showNotification(message) {
     const notificationContainer = document.getElementById('notification-container');
-    
     const notification = document.createElement('div');
     notification.classList.add('notification');
     notification.textContent = message;
-
     notificationContainer.appendChild(notification);
-
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-
-    const timeoutId = setTimeout(() => {
-        notification.classList.add('hide');
-    }, 3000);
-
+    setTimeout(() => notification.classList.add('show'), 100);
+    const timeoutId = setTimeout(() => notification.classList.add('hide'), 3000);
     const removeTimeoutId = setTimeout(() => {
         notification.remove();
         notificationCount--;
         notificationTimeouts.shift();
     }, 4000);
-
     notificationCount++;
     if (notificationCount > maxNotifications) {
         const firstNotification = notificationContainer.querySelector('.notification');
@@ -241,23 +201,8 @@ function showNotification(message) {
             notificationCount--;
         }
     }
-
-    notificationTimeouts.push(timeoutId);
-    notificationTimeouts.push(removeTimeoutId);
+    notificationTimeouts.push(timeoutId, removeTimeoutId);
 }
-
-window.addEventListener('load', () => {
-    checkbox.checked = false;
-});
-
-botaoregistrar.addEventListener("click", register);
-btnDialogFechar.addEventListener("click", closeDialog);
-checkbox.addEventListener("change", toggleHistory);
-registerButtonSelect.addEventListener("click", handleRegister);
-
-setInterval(updateContentHour, 1000);
-updateContentHour();
-updateHistoryList();
 
 function clearHistory() {
     historyData = {};
@@ -265,8 +210,18 @@ function clearHistory() {
     updateHistoryList();
 }
 
+window.addEventListener('load', () => checkbox.checked = false);
+
+botaoregistrar.addEventListener("click", register);
+btnDialogFechar.addEventListener("click", closeDialog);
+checkbox.addEventListener("change", toggleHistory);
+registerButtonSelect.addEventListener("click", handleRegister);
 clearHistoryButton.addEventListener("click", () => {
     if (confirm("Você realmente deseja limpar o histórico?")) {
         clearHistory();
     }
 });
+
+setInterval(updateContentHour, 1000);
+updateContentHour();
+updateHistoryList();
