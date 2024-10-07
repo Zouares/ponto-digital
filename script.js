@@ -13,21 +13,16 @@ const historyList = document.getElementById("history-list");
 const registerTypeSelect = document.getElementById("register-type");
 const registerButtonSelect = document.getElementById("register-button-select");
 const clearHistoryButton = document.getElementById("clear-history");
-const justificativaField = document.getElementById("justificativa");
+const justificativaSelect = document.getElementById("justificativa");
+const uploadContainer = document.getElementById('upload-container'); 
+const fileInput = document.getElementById('file-upload'); 
+const imagePreview = document.getElementById('image-preview'); 
 
 let historyData = loadHistoryFromLocalStorage();
 let hasEnteredToday = false;
 let notificationCount = 0;
 const maxNotifications = 5;
 let notificationTimeouts = [];
-
-function PositionObt(geolocalizao) {
-    console.log(geolocalizao);
-}
-
-function Positionfailed(erro) {
-    console.error(erro);
-}
 
 function saveHistoryToLocalStorage() {
     localStorage.setItem("historyData", JSON.stringify(historyData));
@@ -134,37 +129,42 @@ function updateHistoryList() {
         historyHeader.textContent = `${getDayLabel(date)} ${date}`;
         historyList.appendChild(historyHeader);
         entries.forEach(entry => {
-            addHistoryEntryToList(entry.type, entry.time);
+            addHistoryEntryToList(entry.type, entry.time, entry.justificativa);
         });
     });
 }
 
-function addHistoryEntryToList(type, time) {
+function addHistoryEntryToList(type, time, justificativa) {
     const historyItem = document.createElement("div");
     historyItem.className = "history-item";
+    
     const statusDot = document.createElement("div");
     statusDot.className = "status-dot";
+    
     if (type === "ENTRADA") statusDot.style.backgroundColor = "#28a745";
     else if (type === "SAÍDA") statusDot.style.backgroundColor = "#dc3545";
     else if (type === "INTERVALO" || type === "SAÍDA INTERVALO") statusDot.style.backgroundColor = "#ffc107";
+    
     historyItem.appendChild(statusDot);
+    
     const timeElement = document.createElement("div");
     timeElement.className = "time";
     timeElement.textContent = time;
     historyItem.appendChild(timeElement);
+    
     const entryElement = document.createElement("div");
     entryElement.className = "entry";
-    entryElement.textContent = type;
+    entryElement.textContent = `${type} - Justificativa: ${justificativa ? justificativa : "Nenhuma"}`;
     historyItem.appendChild(entryElement);
+    
     historyList.appendChild(historyItem);
-
 }
 
 function handleRegister() {
     const type = registerTypeSelect.value;
     const currentDate = getCurrentDate();
     const currentTime = getCurrentTimehistory();
-    const justificativa = justificativaField.value;
+    const justificativa = justificativaSelect.value;
 
     if (type === "SAÍDA" && !hasEnteredToday) {
         alert("Entre primeiro.");
@@ -205,13 +205,34 @@ function showNotification(message) {
     notificationTimeouts.push(timeoutId, removeTimeoutId);
 }
 
-
-
 function clearHistory() {
     historyData = {};
     saveHistoryToLocalStorage();
     updateHistoryList();
 }
+
+
+justificativaSelect.addEventListener('change', function() {
+    if (this.value === 'Consulta médica') {
+        uploadContainer.style.display = 'block';
+    } else {
+        uploadContainer.style.display = 'none';
+        imagePreview.src = ''; 
+    }
+});
+
+
+fileInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result; 
+            imagePreview.style.display = 'block'; 
+        }
+        reader.readAsDataURL(file); 
+    }
+});
 
 window.addEventListener('load', () => checkbox.checked = false);
 
@@ -228,4 +249,3 @@ clearHistoryButton.addEventListener("click", () => {
 setInterval(updateContentHour, 1000);
 updateContentHour();
 updateHistoryList();
-
